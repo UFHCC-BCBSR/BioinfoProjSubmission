@@ -20,7 +20,8 @@ RUN install2.r --error \
     glue \
     janitor \
     shinyjs \
-    uuid
+    uuid \
+    zip
 
 # Copy your Shiny app files into the container
 # OM do not copy, will bind-mount
