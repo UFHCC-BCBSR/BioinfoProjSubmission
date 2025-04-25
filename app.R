@@ -6,7 +6,6 @@ library(glue)
 library(janitor)
 library(shinyjs)
 source("helpers.R")
-print("✅ This is the NEW version of the app!")
 
 ui <- fluidPage(
   useShinyjs(), 
@@ -14,8 +13,9 @@ ui <- fluidPage(
     mainPanel(
       tabsetPanel(
         id = "main_tabs",
+
         tabPanel("Project Metadata",
-                 helpText("All Fun fields below are required in order to submit a project for ATAC-seq analysis."),
+                 helpText("All fields below are required in order to submit a project for ATAC-seq analysis."),
                  helpText("Please contact your bioinformatics collaborator if you need assistance filling out this form."),
                  helpText("When all fields are complete and your sample information is uploaded and validated, you will be able to submit the project using the submit button on the top right."),
                  
@@ -240,7 +240,7 @@ server <- function(input, output, session) {
     uuid <- uuid::UUIDgenerate()
     folder_id <- paste0(gsub(" ", "_", input$pi), "_", input$seqID, "_", uuid)
    #output_dir <- file.path(tempdir(), "data_submissions", assay(), folder_id)
-     output_dir <- file.path("/pubapps/jobrant/bcb-sr/dev/apps/ProjectReporting", "data_submissions", assay(), folder_id)
+output_dir <- file.path("/srv/shiny-server", "data_submissions", assay(), folder_id)
     
 dir.create(output_dir, recursive = TRUE,showWarnings=TRUE)
     
