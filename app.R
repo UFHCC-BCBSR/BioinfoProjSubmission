@@ -296,7 +296,7 @@ dir.create(output_dir, recursive = TRUE,showWarnings=TRUE)
         files_to_zip <- list.files(pi_uuid_path, full.names = TRUE)
         
         # Create the ZIP file containing only the files from PI_UUID
-        zip::zipr(zipfile = file, files = files_to_zip, root = pi_uuid_path)
+        zip::zipr(zipfile = file, files = files_to_zip)
       }
     )
     
