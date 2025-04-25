@@ -284,22 +284,32 @@ dir.create(output_dir, recursive = TRUE,showWarnings=TRUE)
     #public_base <- "/orange/cancercenter-dept/web/public/BCB-SR/project_submissions"
     #public_dir <- file.path(public_base, folder_id)
     
-    output$download_submission <- downloadHandler(
-      filename = function() {
-        paste0("submission_", input$seqID, ".zip")
-      },
-      content = function(file) {
-        # Determine the path to the PI_UUID folder
-        pi_uuid_path <- file.path(output_dir)
-        
-        # List all files within the PI_UUID folder
-        files_to_zip <- list.files(pi_uuid_path, full.names = TRUE)
-        
-        # Create the ZIP file containing only the files from PI_UUID
-        zip::zipr(zipfile = file, files = files_to_zip)
-      }
+output$download_submission <- downloadHandler(
+  filename = function() {
+    paste0("submission_", input$seqID, ".zip")
+  },
+  content = function(file) {
+    # This is where all the submission files were written
+    submission_folder <- output_dir
+
+    # Make a temporary copy of the folder contents to stage them for zipping
+    temp_zip_dir <- tempfile("submission_staging_")
+    dir.create(temp_zip_dir)
+
+    file.copy(
+      from = list.files(submission_folder, full.names = TRUE),
+      to = temp_zip_dir,
+      recursive = TRUE
     )
-    
+
+    # Zip the contents into the 'file' path that Shiny expects
+    zip::zipr(
+      zipfile = file,
+      files = list.files(temp_zip_dir, full.names = FALSE),
+      root = temp_zip_dir
+    )
+  }
+)
     
     showModal(modalDialog(
       title = "Submission Ready",
